@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Furniture Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="admin-body">
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="container">
+            <h1 class="admin-logo">Admin Panel</h1>
+            <div class="admin-actions">
+                <button class="btn btn-danger" id="logoutBtn">Logout</button>
+                <a href="index.html" class="btn btn-secondary">Back to Website</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container admin-container">
+        <!-- Add/Edit Product Form -->
+        <div class="admin-form-section">
+            <h2 id="formTitle">Add New Product</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="productTitle">Product Title</label>
+                    <input type="text" id="productTitle" placeholder="Enter product name">
+                </div>
+
+                <div class="form-group">
+                    <label for="productPrice">Price (₹)</label>
+                    <input type="number" id="productPrice" placeholder="Enter price">
+                </div>
+
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory">
+                        <option value="Door">Door</option>
+                        <option value="Windows">Windows</option>
+                        <option value="Table">Table</option>
+                        <option value="Sofa">Sofa</option>
+                        <option value="Wardrobe">Wardrobe</option>
+                        <option value="Bed">Bed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage">Product Image</label>
+                    <input type="file" id="productImage" accept="image/*">
+                </div>
+            </div>
+
+            <div class="image-preview" id="imagePreview">
+                <!-- Image preview will appear here -->
+            </div>
+
+            <div class="form-actions" id="formActions">
+                <button class="btn btn-primary" id="addProductBtn">
+                    <i data-lucide="plus"></i>
+                    <span>Add Product</span>
+                </button>
+                
+                <!-- Edit buttons (hidden by default) -->
+                <div class="edit-actions" id="editActions" style="display: none;">
+                    <button class="btn btn-success" id="saveEditBtn">Save Changes</button>
+                    <button class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products List -->
+        <div class="admin-list-section">
+            <h2>All Products (<span id="productsCount">0</span>)</h2>
+            
+            <div class="products-list" id="productsList">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Hidden input for editing product ID -->
+    <input type="hidden" id="editingProductId">
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
