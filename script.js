@@ -200,6 +200,8 @@ function handleLogin() {
 
     // Check credentials (Admin@123 / 237007)
     if (username === 'Admin@123' && password === '237007') {
+        // Set session
+        localStorage.setItem('admin-logged-in', 'true');
         // Redirect to admin panel
         window.location.href = 'admin.html';
     } else {
