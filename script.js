@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.lucide) {
         window.lucide.createIcons();
     }
-    
+
     // Initialize the website
     initWebsite();
 });
@@ -21,13 +21,13 @@ const categories = ['All', 'Door', 'Windows', 'Table', 'Sofa', 'Wardrobe', 'Bed'
 function initWebsite() {
     // Load products from localStorage
     loadProducts();
-    
+
     // Setup event listeners
     setupEventListeners();
-    
+
     // Render categories
     renderCategories();
-    
+
     // Render products
     renderProducts();
 }
@@ -50,35 +50,34 @@ function saveProducts() {
     localStorage.setItem('furniture-products', JSON.stringify(products));
 }
 
-// Setup event listeners
 function setupEventListeners() {
     // Menu button
     const menuBtn = document.getElementById('menuBtn');
     const closeBtn = document.getElementById('closeBtn');
     const drawerOverlay = document.getElementById('drawerOverlay');
     const drawer = document.getElementById('drawer');
-    
+
     if (menuBtn) {
         menuBtn.addEventListener('click', () => {
             drawer.classList.add('active');
             drawerOverlay.classList.add('active');
         });
     }
-    
+
     if (closeBtn) {
         closeBtn.addEventListener('click', closeDrawer);
     }
-    
+
     if (drawerOverlay) {
         drawerOverlay.addEventListener('click', closeDrawer);
     }
-    
+
     // Admin link
     const adminLink = document.getElementById('adminLink');
     if (adminLink) {
         adminLink.addEventListener('click', openLoginPopup);
     }
-    
+
     // Sort select
     const sortSelect = document.getElementById('sortSelect');
     if (sortSelect) {
@@ -88,7 +87,7 @@ function setupEventListeners() {
             renderProducts();
         });
     }
-    
+
     // Login popup
     const loginOverlay = document.getElementById('loginOverlay');
     const loginPopup = document.getElementById('loginPopup');
@@ -96,19 +95,19 @@ function setupEventListeners() {
     const loginBtn = document.getElementById('loginBtn');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
-    
+
     if (loginOverlay) {
         loginOverlay.addEventListener('click', closeLoginPopup);
     }
-    
+
     if (cancelLogin) {
         cancelLogin.addEventListener('click', closeLoginPopup);
     }
-    
+
     if (loginBtn) {
         loginBtn.addEventListener('click', handleLogin);
     }
-    
+
     if (passwordInput) {
         passwordInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -116,13 +115,35 @@ function setupEventListeners() {
             }
         });
     }
+
+    // Scroll effect for header
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('.header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Reveal animations on scroll
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(el => revealObserver.observe(el));
 }
 
 // Close drawer
 function closeDrawer() {
     const drawer = document.getElementById('drawer');
     const drawerOverlay = document.getElementById('drawerOverlay');
-    
+
     if (drawer) drawer.classList.remove('active');
     if (drawerOverlay) drawerOverlay.classList.remove('active');
 }
@@ -130,13 +151,13 @@ function closeDrawer() {
 // Open login popup
 function openLoginPopup() {
     closeDrawer();
-    
+
     const loginOverlay = document.getElementById('loginOverlay');
     const loginPopup = document.getElementById('loginPopup');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const loginError = document.getElementById('loginError');
-    
+
     if (loginOverlay) loginOverlay.classList.add('active');
     if (loginPopup) loginPopup.classList.add('active');
     if (usernameInput) usernameInput.value = '';
@@ -145,7 +166,7 @@ function openLoginPopup() {
         loginError.textContent = '';
         loginError.classList.remove('active');
     }
-    
+
     // Focus on username input
     setTimeout(() => {
         if (usernameInput) usernameInput.focus();
@@ -157,7 +178,7 @@ function closeLoginPopup() {
     const loginOverlay = document.getElementById('loginOverlay');
     const loginPopup = document.getElementById('loginPopup');
     const loginError = document.getElementById('loginError');
-    
+
     if (loginOverlay) loginOverlay.classList.remove('active');
     if (loginPopup) loginPopup.classList.remove('active');
     if (loginError) {
@@ -171,12 +192,12 @@ function handleLogin() {
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const loginError = document.getElementById('loginError');
-    
+
     if (!usernameInput || !passwordInput || !loginError) return;
-    
+
     const username = usernameInput.value;
     const password = passwordInput.value;
-    
+
     // Check credentials (Admin@123 / 237007)
     if (username === 'Admin@123' && password === '237007') {
         // Redirect to admin panel
@@ -184,7 +205,7 @@ function handleLogin() {
     } else {
         loginError.textContent = 'Invalid username or password!';
         loginError.classList.add('active');
-        
+
         // Shake animation
         loginError.style.animation = 'none';
         setTimeout(() => {
@@ -197,9 +218,9 @@ function handleLogin() {
 function renderCategories() {
     const categoriesScroll = document.getElementById('categoriesScroll');
     if (!categoriesScroll) return;
-    
+
     categoriesScroll.innerHTML = '';
-    
+
     categories.forEach(category => {
         const button = document.createElement('button');
         button.className = `category-btn ${category === currentCategory ? 'active' : ''}`;
@@ -211,10 +232,10 @@ function renderCategories() {
                 btn.classList.remove('active');
             });
             button.classList.add('active');
-            
+
             renderProducts();
         });
-        
+
         categoriesScroll.appendChild(button);
     });
 }
@@ -224,13 +245,13 @@ function renderProducts() {
     const productsGrid = document.getElementById('productsGrid');
     const emptyState = document.getElementById('emptyState');
     if (!productsGrid) return;
-    
+
     // Filter products by category
     let filteredProducts = products.filter(product => {
         if (currentCategory === 'All') return true;
         return product.category === currentCategory;
     });
-    
+
     // Sort products
     filteredProducts.sort((a, b) => {
         if (currentSort === 'newest') {
@@ -242,10 +263,10 @@ function renderProducts() {
         }
         return 0;
     });
-    
+
     // Clear grid
     productsGrid.innerHTML = '';
-    
+
     // Show empty state if no products
     if (filteredProducts.length === 0) {
         if (emptyState) {
@@ -254,17 +275,17 @@ function renderProducts() {
         }
         return;
     }
-    
+
     // Hide empty state
     if (emptyState) {
         emptyState.style.display = 'none';
     }
-    
+
     // Create product cards
     filteredProducts.forEach(product => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
-        
+
         productCard.innerHTML = `
             <div class="product-image">
                 <img src="${product.image}" alt="${product.title}" loading="lazy">
@@ -275,7 +296,7 @@ function renderProducts() {
                 <p class="product-price">₹${product.price}</p>
             </div>
         `;
-        
+
         productsGrid.appendChild(productCard);
     });
 }
